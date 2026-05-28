@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 92" role="img" aria-labelledby="title desc">
+  <title id="title">Souvenir de Paddock</title>
+  <desc id="desc">Logo avec volant historique et cadre de film</desc>
+  <defs>
+    <style>
+      .cream { fill: #fff7e8; }
+      .green { fill: #1f5b48; }
+      .red { fill: #b6252a; }
+      .line { fill: none; stroke: #fff7e8; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+      .thin { fill: none; stroke: #fff7e8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .text { fill: #fff7e8; font-family: Arial, Helvetica, sans-serif; font-weight: 800; letter-spacing: 0; }
+      .sub { fill: #c28c2c; font-family: Arial, Helvetica, sans-serif; font-weight: 700; letter-spacing: 0; }
+    </style>
+  </defs>
+  <rect x="2" y="12" width="68" height="68" rx="12" class="green" />
+  <rect x="9" y="20" width="7" height="8" rx="1" class="cream" opacity=".78" />
+  <rect x="9" y="34" width="7" height="8" rx="1" class="cream" opacity=".78" />
+  <rect x="9" y="48" width="7" height="8" rx="1" class="cream" opacity=".78" />
+  <rect x="9" y="62" width="7" height="8" rx="1" class="cream" opacity=".78" />
+  <rect x="56" y="20" width="7" height="8" rx="1" class="cream" opacity=".78" />
+  <rect x="56" y="34" width="7" height="8" rx="1" class="cream" opacity=".78" />
+  <rect x="56" y="48" width="7" height="8" rx="1" class="cream" opacity=".78" />
+  <rect x="56" y="62" width="7" height="8" rx="1" class="cream" opacity=".78" />
+  <circle cx="36" cy="46" r="22" class="line" />
+  <circle cx="36" cy="46" r="5" class="cream" />
+  <path d="M36 46 22 32M36 46l18-7M36 46l-4 18" class="thin" />
+  <path d="M63 68c10-4 16-11 19-22" class="red" opacity=".95" />
+  <text x="92" y="43" class="text" font-size="26">Souvenir</text>
+  <text x="92" y="70" class="sub" font-size="19">de Paddock</text>
+</svg>

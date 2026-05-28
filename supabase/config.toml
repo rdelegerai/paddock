@@ -1,0 +1,32 @@
+project_id = "qmhubedesoidofqrvdux"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[studio]
+enabled = true
+port = 54323
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[functions.generate-story]
+verify_jwt = false
+
+[functions.submit-project]
+verify_jwt = false
+
+[functions.upload-photo]
+verify_jwt = false
+
+[functions.research-driver]
+verify_jwt = false

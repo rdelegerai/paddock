@@ -1,0 +1,242 @@
+﻿<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Souvenir de Paddock</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#accueil" aria-label="Souvenir de Paddock">
+        <img src="assets/logo-souvenir-de-paddock.svg" alt="" />
+      </a>
+
+    </header>
+
+    <main>
+      <section id="accueil" class="hero">
+        <div class="hero-content">
+          <p class="eyebrow">Portrait vidéo pour pilotes de compétition historique</p>
+          <h1><span>Souvenir</span><span>de&nbsp;Paddock</span></h1>
+          <p class="hero-text">Nous créons une vidéo souvenir d'environ 1 minute, à partir de vos photos transformées en séquences vidéo, pour 90 €.</p>
+          <div class="hero-actions">
+            <a class="button secondary" href="#exemples">Voir l'offre</a>
+            <a class="button secondary" href="#video-exemple">Voir un exemple</a>
+            <a class="button primary" href="#votre-video">Votre vidéo</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="exemples" class="section service-section">
+        <div class="section-heading">
+          <p class="eyebrow">Offre de lancement</p>
+          <h2>Une vidéo souvenir courte et personnelle</h2>
+        </div>
+        <div class="service-grid">
+          <article class="service-item">
+            <h3>Format court</h3>
+            <p>Environ 1 minute, facile à regarder, à envoyer et à partager avec la famille ou le club.</p>
+          </article>
+          <article class="service-item">
+            <h3>Prix simple</h3>
+            <p>90 € pour une vidéo personnalisée, sans formule compliquée ni option à choisir au départ.</p>
+          </article>
+          <article class="service-item">
+            <h3>Photos animées</h3>
+            <p>Vos photos sont transformées en séquences vidéo, puis assemblées à la main avec le texte.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="video-exemple" class="video-section video-band" aria-label="Exemple vidéo">
+        <video
+          id="exampleVideo"
+          class="video-band-player"
+          title="Exemple vidéo Souvenir de Paddock"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          controls
+        >
+          <source src="https://qmhubedesoidofqrvdux.supabase.co/storage/v1/object/public/landing%20page/_VIDEO-FINALE_720p%20(1).mp4" type="video/mp4" />
+          Votre navigateur ne peut pas lire cette vidéo.
+        </video>
+      </section>
+
+      <section id="votre-video" class="section builder-section">
+        <div class="section-heading compact">
+          <h2>Votre vidéo en 3 étapes</h2>
+          <p>Offre de lancement : une vidéo souvenir personnalisée d'environ 1 minute, pour 90 €.</p>
+        </div>
+
+        <form id="storyForm" class="flow-panel">
+          <input id="videoLength" name="videoLength" type="hidden" value="short" />
+          <input id="webNotes" name="webNotes" type="hidden" value="" />
+
+          <section class="step-card" data-step="1">
+            <button class="step-title" type="button" data-step-toggle="1" aria-expanded="false">
+              <span class="step-number">1</span>
+              <span class="step-title-copy">
+                <span class="step-heading">Questionnaire</span>
+              </span>
+            </button>
+            <div class="step-body">
+              <div class="field-grid two-cols">
+                <label>
+                  Nom du pilote
+                  <input id="pilotName" name="pilotName" type="text" placeholder="Ex. Jean Martin" autocomplete="name" />
+                </label>
+                <label>
+                  Année de naissance, si connue
+                  <input id="birthYear" name="birthYear" type="number" inputmode="numeric" placeholder="Ex. 1948" />
+                </label>
+                <label>
+                  Discipline principale
+                  <select id="discipline" name="discipline">
+                    <option value="compétition automobile historique">Compétition automobile historique</option>
+                    <option value="Formule Ford historique">Formule Ford historique</option>
+                    <option value="Formule France historique">Formule France historique</option>
+                    <option value="rallye historique">Rallye historique</option>
+                    <option value="course de côte historique">Course de côte historique</option>
+                    <option value="karting et compétition historique">Karting et compétition historique</option>
+                    <option value="karting">Karting</option>
+                  </select>
+                </label>
+                <label>
+                  Années de pratique, si connues
+                  <input id="period" name="period" type="text" placeholder="Ex. de 1978 à 2005" />
+                </label>
+                <label>
+                  Ville, région ou club, optionnel
+                  <input id="cityClub" name="cityClub" type="text" placeholder="Ex. ASA, club, région..." />
+                </label>
+                <label>
+                  Votre email
+                  <input id="contactEmail" name="contactEmail" type="email" placeholder="exemple@email.fr" autocomplete="email" />
+                </label>
+              </div>
+
+              <div class="question-list compact-question-list">
+                <label>
+                  1. Comment son histoire de pilote a commencé ?
+                  <textarea id="startStory" name="startStory" rows="2"></textarea>
+                </label>
+                <label>
+                  2. Quelles voitures, circuits, rallyes ou lieux faut-il absolument citer ?
+                  <textarea id="vehicleAndPlaces" name="vehicleAndPlaces" rows="2"></textarea>
+                </label>
+                <label>
+                  3. Quel est son plus beau souvenir de course ?
+                  <textarea id="proudMoment" name="proudMoment" rows="2"></textarea>
+                </label>
+                <label>
+                  4. Quelle difficulté ou anecdote raconte bien son parcours ?
+                  <textarea id="hardMoment" name="hardMoment" rows="2"></textarea>
+                </label>
+                <label>
+                  5. Quelles personnes faut-il remercier ou citer ?
+                  <textarea id="keyPeople" name="keyPeople" rows="2"></textarea>
+                </label>
+                <label>
+                  6. Quel message final doit rester ?
+                  <textarea id="familyMessage" name="familyMessage" rows="2"></textarea>
+                </label>
+              </div>
+
+              <div class="free-notes-block">
+                <label>
+                  Biographie, notes libres ou texte déjà écrit
+                  <textarea id="bioNotes" name="bioNotes" rows="5"></textarea>
+                </label>
+                <label>
+                  Importer une biographie en fichier texte
+                  <input id="bioFile" name="bioFile" type="file" accept=".txt,.md,text/plain,text/markdown" />
+                </label>
+              </div>
+
+              <div id="offerSummary" class="offer-summary">Vidéo courte - environ 1 minute - 90 €</div>
+              <div class="form-actions compact-actions">
+                <button class="button secondary" type="button" data-next-step="2">Valider cette étape</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="step-card" data-step="2">
+            <button class="step-title" type="button" data-step-toggle="2" aria-expanded="false">
+              <span class="step-number">2</span>
+              <span class="step-title-copy">
+                <span class="step-heading">Ajouter les photos</span>
+              </span>
+            </button>
+            <div class="step-body">
+              <label>
+                Photos du pilote, voitures, paddocks, famille, trophées
+                <input id="photos" name="photos" type="file" accept="image/*" multiple />
+              </label>
+              <div id="photoPreview" class="photo-preview" aria-live="polite"></div>
+              <div class="form-actions compact-actions">
+                <button class="button secondary" type="button" data-next-step="3">Valider cette étape</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="step-card generated-step" data-step="3">
+            <button class="step-title" type="button" data-step-toggle="3" aria-expanded="false">
+              <span class="step-number">3</span>
+              <span class="step-title-copy">
+                <span class="step-heading">Relire et corriger le texte final</span>
+              </span>
+            </button>
+            <div class="step-body">
+              <div class="form-actions compact-actions">
+                <button id="generateStory" class="button primary" type="button">Générer le texte</button>
+              </div>
+              <textarea id="generatedStory" rows="14" placeholder="Le texte apparaîtra ici après génération. Vous pourrez le corriger directement."></textarea>
+              <div id="printStory" class="print-story" aria-hidden="true"></div>
+              <div class="validation-panel">
+                <p>En validant, le texte final et les photos seront enregistrés dans le dossier. Le paiement sera ajouté ensuite.</p>
+                <button id="submitProject" class="button primary" type="button">Valider ce texte</button>
+              </div>
+            </div>
+          </section>
+
+          <div id="appStatus" class="app-status" role="status" aria-live="polite"></div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Une question, une idée ou un retour sur Souvenir de Paddock ?</p>
+      <p>
+        Contact :
+        <a id="contactEmailLink" href="mailto:rdelegers.ai@gmail.com" data-copy-email="rdelegers.ai@gmail.com">rdelegers.ai@gmail.com</a>
+        <span id="contactCopyStatus" class="contact-copy-status" aria-live="polite"></span>
+      </p>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
