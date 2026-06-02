@@ -235,23 +235,24 @@ Besoin :
 Solution retenue :
 
 - Stripe génère automatiquement une facture lors du paiement Checkout.
-- Stripe demande les informations de facturation au moment du paiement.
-- La collecte d'identifiant fiscal est activée si le client en a besoin.
-- L'email de confirmation client indique que la facture est générée par Stripe.
+- Stripe ne force plus l'adresse postale : elle est demandée seulement si Stripe en a besoin.
+- La collecte d'identifiant fiscal reste disponible si le client en a besoin.
+- L'email de confirmation client ajoute un lien vers la facture Stripe quand ce lien est disponible.
 
 Code préparé :
 
 - `create-checkout-session` active `invoice_creation`.
-- `create-checkout-session` rend l'adresse de facturation obligatoire.
+- `create-checkout-session` laisse l'adresse de facturation en mode automatique.
 - `create-checkout-session` active `tax_id_collection`.
-- `stripe-webhook` ajoute une phrase facture dans l'email client.
+- `stripe-webhook` récupère le lien de facture Stripe et l'ajoute dans l'email client.
 
 État :
 
 - `create-checkout-session` redéployée.
 - `stripe-webhook` redéployée.
-- À vérifier dans Stripe : l'envoi automatique des emails de paiement/facture est activé.
-- Faire un nouveau paiement live de test et vérifier que la facture est bien générée.
+- La facture a été générée lors du test live, mais elle n'était pas jointe à l'email client.
+- Correction déployée : ajouter le lien facture/PDF dans l'email client.
+- À vérifier après redéploiement : refaire un paiement live et vérifier que l'email client contient le lien facture.
 
 ## Test production paiement
 

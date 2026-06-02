@@ -1,7 +1,13 @@
 import { corsHeaders, jsonResponse } from "../_shared/cors.ts";
 
 const toleranceSeconds = 300;
+const stripeApiVersion = "2026-02-25.clover";
 const defaultNotificationEmail = "rdeleger.ai@gmail.com";
+
+type InvoiceLinks = {
+  hostedInvoiceUrl: string | null;
+  invoicePdf: string | null;
+};
 
 type Project = {
   id: string;
@@ -30,6 +36,14 @@ const getEnv = (name: string) => {
 };
 
 const getOptionalEnv = (name: string) => Deno.env.get(name) || "";
+
+const stripeHeaders = () => {
+  const stripeSecretKey = getEnv("STRIPE_SECRET_KEY");
+  return {
+    Authorization: `Bearer ${stripeSecretKey}`,
+    "Stripe-Version": stripeApiVersion,
+  };
+};
 
 const projectSelect = [
   "id",
@@ -115,6 +129,61 @@ const computeSignature = async (secret: string, payload: string) => {
   );
   const signature = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload));
   return toHex(signature);
+};
+
+const getInvoiceId = (value: unknown) => {
+  if (!value) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "object" && "id" in value) return String((value as { id?: unknown }).id || "");
+  return "";
+};
+
+const getInvoiceLinksFromObject = (invoice: unknown): InvoiceLinks => {
+  if (!invoice || typeof invoice !== "object") return { hostedInvoiceUrl: null, invoicePdf: null };
+  const data = invoice as { hosted_invoice_url?: unknown; invoice_pdf?: unknown };
+  return {
+    hostedInvoiceUrl: typeof data.hosted_invoice_url === "string" ? data.hosted_invoice_url : null,
+    invoicePdf: typeof data.invoice_pdf === "string" ? data.invoice_pdf : null,
+  };
+};
+
+const retrieveInvoice = async (invoiceId: string) => {
+  const response = await fetch(`https://api.stripe.com/v1/invoices/${encodeURIComponent(invoiceId)}`, {
+    headers: stripeHeaders(),
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error?.message || "Impossible de récupérer la facture Stripe.");
+  return data;
+};
+
+const retrieveCheckoutSession = async (sessionId: string) => {
+  const params = new URLSearchParams();
+  params.append("expand[]", "invoice");
+  const response = await fetch(
+    `https://api.stripe.com/v1/checkout/sessions/${encodeURIComponent(sessionId)}?${params.toString()}`,
+    { headers: stripeHeaders() },
+  );
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error?.message || "Impossible de récupérer la session Stripe.");
+  return data;
+};
+
+const getInvoiceLinks = async (session: any): Promise<InvoiceLinks> => {
+  const linksFromEvent = getInvoiceLinksFromObject(session.invoice);
+  if (linksFromEvent.hostedInvoiceUrl || linksFromEvent.invoicePdf) return linksFromEvent;
+
+  let invoiceId = getInvoiceId(session.invoice);
+  if (!invoiceId && session.id) {
+    const checkoutSession = await retrieveCheckoutSession(session.id);
+    const linksFromSession = getInvoiceLinksFromObject(checkoutSession.invoice);
+    if (linksFromSession.hostedInvoiceUrl || linksFromSession.invoicePdf) return linksFromSession;
+    invoiceId = getInvoiceId(checkoutSession.invoice);
+  }
+
+  if (!invoiceId) return { hostedInvoiceUrl: null, invoicePdf: null };
+  return getInvoiceLinksFromObject(await retrieveInvoice(invoiceId));
 };
 
 const getProject = async (projectId: string): Promise<Project> => {
@@ -282,15 +351,21 @@ const ownerEmail = (project: Project) => {
   return { subject, html, text };
 };
 
-const customerEmail = (project: Project) => {
+const customerEmail = (project: Project, invoiceLinks: InvoiceLinks) => {
   const subject = "Confirmation de votre commande Souvenir de Paddock";
+  const invoiceHtml = invoiceLinks.hostedInvoiceUrl
+    ? `<p><strong>Facture :</strong> <a href="${escapeHtml(invoiceLinks.hostedInvoiceUrl)}">consulter votre facture</a>${invoiceLinks.invoicePdf ? ` ou <a href="${escapeHtml(invoiceLinks.invoicePdf)}">télécharger le PDF</a>` : ""}.</p>`
+    : "<p>La facture est générée par Stripe avec les informations de facturation saisies au paiement.</p>";
+  const invoiceText = invoiceLinks.hostedInvoiceUrl
+    ? [`Facture : ${invoiceLinks.hostedInvoiceUrl}`, invoiceLinks.invoicePdf ? `PDF : ${invoiceLinks.invoicePdf}` : ""].filter(Boolean).join("\n")
+    : "La facture est générée par Stripe avec les informations de facturation saisies au paiement.";
   const html = `
     <h1>Commande confirmée</h1>
     <p>Bonjour,</p>
     <p>Votre commande Souvenir de Paddock est bien confirmée pour ${escapeHtml(project.pilot_name || "le pilote renseigné")}.</p>
     <p><strong>Montant :</strong> ${escapeHtml(formatAmount(project.amount_cents, project.currency))}</p>
     <p><strong>Délai annoncé :</strong> 7 jours calendaires maximum après paiement et réception des éléments complets.</p>
-    <p>La facture est générée par Stripe avec les informations de facturation saisies au paiement.</p>
+    ${invoiceHtml}
     <p>Je vais maintenant préparer la vidéo souvenir à partir des informations et photos transmises.</p>
     <p>Si une information manque, je vous recontacterai par email.</p>
     <p>Bien cordialement,<br>Renan<br>Souvenir de Paddock</p>
@@ -301,7 +376,7 @@ const customerEmail = (project: Project) => {
     `Votre commande Souvenir de Paddock est bien confirmée pour ${project.pilot_name || "le pilote renseigné"}.`,
     `Montant : ${formatAmount(project.amount_cents, project.currency)}`,
     "Délai annoncé : 7 jours calendaires maximum après paiement et réception des éléments complets.",
-    "La facture est générée par Stripe avec les informations de facturation saisies au paiement.",
+    invoiceText,
     "",
     "Je vais maintenant préparer la vidéo souvenir à partir des informations et photos transmises.",
     "Si une information manque, je vous recontacterai par email.",
@@ -314,7 +389,7 @@ const customerEmail = (project: Project) => {
   return { subject, html, text };
 };
 
-const sendPaymentNotifications = async (project: Project) => {
+const sendPaymentNotifications = async (project: Project, invoiceLinks: InvoiceLinks) => {
   const notificationEmail = getOptionalEnv("NOTIFICATION_EMAIL") || defaultNotificationEmail;
 
   if (!project.owner_notified_at) {
@@ -325,7 +400,7 @@ const sendPaymentNotifications = async (project: Project) => {
 
   const toCustomer = project.customer_email || project.contact_email;
   if (toCustomer && !project.customer_notified_at) {
-    const email = customerEmail(project);
+    const email = customerEmail(project, invoiceLinks);
     await sendEmail(toCustomer, email.subject, email.html, email.text);
     await markNotificationSent(project.id, "customer_notified_at");
   }
@@ -342,7 +417,11 @@ Deno.serve(async (request) => {
     const event = JSON.parse(body);
     if (event.type === "checkout.session.completed") {
       const project = await markProjectPaid(event.data.object);
-      await sendPaymentNotifications(project);
+      const invoiceLinks = await getInvoiceLinks(event.data.object).catch(() => ({
+        hostedInvoiceUrl: null,
+        invoicePdf: null,
+      }));
+      await sendPaymentNotifications(project, invoiceLinks);
     }
 
     return jsonResponse({ received: true });
