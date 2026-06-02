@@ -2,6 +2,10 @@
 
 Document principal à utiliser : `finalisation-lancement.md`.
 
+Commercialisation :
+
+- `../commercialisation/README.md`
+
 L'ancien README général a été archivé ici :
 
 - `archive/README-obsolete-2026-06-02.md`
