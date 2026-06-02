@@ -252,7 +252,7 @@ Code préparé :
 - `stripe-webhook` redéployée.
 - La facture a été générée lors du test live, mais elle n'était pas jointe à l'email client.
 - Correction déployée : ajouter le lien facture/PDF dans l'email client.
-- À vérifier après redéploiement : refaire un paiement live et vérifier que l'email client contient le lien facture.
+- Test validé : l'email client contient bien le lien vers la facture Stripe.
 
 ## Test production paiement
 
