@@ -116,6 +116,12 @@ Variables email à ajouter dans Supabase :
 - [ ] Protéger l'accès par token privé.
 - [ ] Générer des liens temporaires vers les photos stockées dans Supabase.
 
+Décision du 2 juin 2026 :
+
+- Le dossier admin n'est pas bloquant pour les premiers clients.
+- Les premières commandes peuvent être traitées depuis l'email interne, Supabase Database et Supabase Storage.
+- Priorité actuelle : Stripe production, puis médiateur, puis commercialisation.
+
 ### 7. Mise en ligne
 
 - [x] Acheter le nom de domaine.
@@ -158,10 +164,9 @@ Pourquoi : le paiement, le webhook et les deux emails fonctionnent. Le site stat
 
 Première action concrète :
 
-1. Refaire une commande Stripe test complète depuis `https://souvenirdepaddock.com`.
-2. Vérifier le retour après paiement sur le vrai domaine.
-3. Vérifier les deux emails après paiement.
-4. Choisir un médiateur de la consommation et remplacer la mention provisoire dans les CGV.
+1. Passer Stripe en production.
+2. Choisir un médiateur de la consommation et remplacer la mention provisoire dans les CGV.
+3. Préparer la commercialisation.
 
 ## Reprise prochaine session
 
@@ -185,10 +190,30 @@ DNS veut dire : réglages du nom de domaine. Cela dira à `souvenirdepaddock.com
 À ne pas oublier ensuite :
 
 - Vérifier que `https://souvenirdepaddock.com` affiche bien la landing page.
-- Refaire une commande Stripe test complète depuis le vrai domaine.
-- Vérifier le retour après paiement sur le vrai domaine.
-- Choisir le médiateur de la consommation et remplacer la mention provisoire dans les CGV.
 - Configurer Stripe en mode production avant les vraies ventes.
+- Choisir le médiateur de la consommation et remplacer la mention provisoire dans les CGV.
+- Préparer la commercialisation.
+
+## Passage Stripe production
+
+Objectif : accepter de vrais paiements sur `https://souvenirdepaddock.com`.
+
+À faire dans Stripe :
+
+1. Vérifier que le compte Stripe est activé pour les paiements réels.
+2. Passer le Dashboard Stripe en mode réel, pas en mode test.
+3. Récupérer la clé secrète live `sk_live...`.
+4. Créer un webhook live vers `https://qmhubedesoidofqrvdux.supabase.co/functions/v1/stripe-webhook`.
+5. Événement à écouter : `checkout.session.completed`.
+6. Récupérer le secret de signature webhook live `whsec...`.
+
+À faire dans Supabase :
+
+1. Remplacer `STRIPE_SECRET_KEY` par la clé live `sk_live...`.
+2. Remplacer `STRIPE_WEBHOOK_SECRET` par le secret live `whsec...`.
+3. Garder `SITE_URL=https://souvenirdepaddock.com`.
+
+Attention : une fois ces secrets live configurés, les cartes de test Stripe ne fonctionneront plus sur le site public. Un test complet de paiement live nécessite une vraie carte, puis éventuellement un remboursement depuis Stripe.
 
 ## Test production paiement
 
