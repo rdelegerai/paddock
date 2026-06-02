@@ -201,13 +201,15 @@ Modifications préparées :
 - Footer mobile corrigé : email, confidentialité et CGV alignés à droite.
 - Image héros mobile recadrée pour mieux afficher le visage du pilote.
 - Dossier `dist` régénéré localement.
+- Déploiement Netlify production effectué sur `https://souvenirdepaddock.com`.
 
-À tester avant le prochain déploiement Netlify :
+Test post-déploiement Netlify :
 
-- Ouvrir le site local ou le futur déploiement Netlify sur mobile.
+- Ouvrir `https://souvenirdepaddock.com` sur mobile.
 - Vérifier que le visage du pilote est visible dans le héros mobile.
 - Vérifier que le footer mobile est cohérent : contact, confidentialité et CGV à droite.
 - Vérifier que le favicon apparaît dans l'onglet du navigateur.
+- Vérifier que les mentions `79 €` ne se coupent pas entre `79` et `€`.
 
 GitHub :
 
