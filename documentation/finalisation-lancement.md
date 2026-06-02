@@ -165,9 +165,7 @@ Pourquoi : le paiement, le webhook et les deux emails fonctionnent. Le site stat
 
 Première action concrète :
 
-1. Passer Stripe en production.
-2. Finaliser le droit de rétractation dans les CGV.
-3. Préparer la commercialisation.
+1. Préparer la commercialisation.
 
 ## Reprise prochaine session
 
@@ -190,9 +188,7 @@ DNS veut dire : réglages du nom de domaine. Cela dira à `souvenirdepaddock.com
 
 À ne pas oublier ensuite :
 
-- Vérifier que `https://souvenirdepaddock.com` affiche bien la landing page.
-- Configurer Stripe en mode production avant les vraies ventes.
-- Finaliser le droit de rétractation dans les CGV.
+- Vérifier que `https://souvenirdepaddock.com` affiche bien la landing page après le prochain déploiement.
 - Préparer la commercialisation.
 
 ## Passage Stripe production
