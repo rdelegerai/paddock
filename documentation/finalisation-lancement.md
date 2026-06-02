@@ -190,6 +190,24 @@ DNS veut dire : réglages du nom de domaine. Cela dira à `souvenirdepaddock.com
 - Choisir le médiateur de la consommation et remplacer la mention provisoire dans les CGV.
 - Configurer Stripe en mode production avant les vraies ventes.
 
+## Test production paiement
+
+Résultat :
+
+- Test de paiement Stripe en mode test réussi depuis `https://souvenirdepaddock.com`.
+- Email client reçu.
+- Email interne réalisateur reçu.
+- Photos envoyées dans Supabase Storage, bucket privé `pilot-photos`.
+
+Où retrouver les photos :
+
+- Dans Supabase, menu `Storage`.
+- Bucket : `pilot-photos`.
+- Dossier : ID du dossier client, par exemple l'ID affiché dans l'email interne.
+- Les chemins exacts sont aussi dans la table `project_media`, colonne `object_path`.
+
+Bucket veut dire : dossier de stockage Supabase. Ici il est privé, donc les photos ne sont pas accessibles publiquement par simple lien.
+
 ## Dernières modifications avant mise à jour Netlify
 
 Objectif : limiter les mises à jour Netlify gratuites en regroupant les dernières corrections avant un seul redéploiement.
