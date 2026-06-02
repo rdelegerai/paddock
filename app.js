@@ -142,7 +142,7 @@ const showPaymentReturnStatus = () => {
   const payment = new URLSearchParams(window.location.search).get("payment");
 
   if (payment === "success") {
-    setStatus("Paiement confirmé. Votre dossier a bien été transmis.", "success");
+    setStatus("Paiement confirmé. Votre dossier a bien été transmis. Vous allez recevoir un email de confirmation avec le lien vers votre facture.", "success");
     window.setTimeout(() => scrollToElement(appStatus, "center"), 120);
   }
   if (payment === "cancelled") {
@@ -247,7 +247,7 @@ const callMultipartEdgeFunction = async (functionName, formData) => {
 const uploadProjectPhotos = async (projectId, files) => {
   const uploaded = [];
   for (const [index, file] of files.entries()) {
-    setStatus(`Envoi photo ${index + 1}/${files.length} : ${file.name}`);
+    setStatus(`Envoi des photos en cours : ${index + 1}/${files.length} - ${file.name}`, "loading");
     const formData = new FormData();
     formData.append("projectId", projectId);
     formData.append("file", file);
@@ -637,7 +637,8 @@ submitProjectButton.addEventListener("click", async () => {
   }
 
   setBusy(true);
-  setStatus("Enregistrement du dossier...");
+  setButtonLoading(submitProjectButton, true, "Envoi en cours...");
+  setStatus("Enregistrement du dossier...", "loading");
 
   try {
     const files = selectedPhotoFiles;
@@ -667,6 +668,7 @@ submitProjectButton.addEventListener("click", async () => {
   } catch (error) {
     setStatus(`Impossible d'enregistrer le dossier. ${error.message}`, "error");
   } finally {
+    setButtonLoading(submitProjectButton, false);
     setBusy(false);
   }
 });

@@ -94,6 +94,8 @@ const createStripeCheckoutSession = async (project: any) => {
       "invoice_creation[enabled]": "true",
       "invoice_creation[invoice_data][description]":
         "Vidéo souvenir personnalisée Souvenir de Paddock.",
+      "invoice_creation[invoice_data][footer]":
+        "Souvenir de Paddock - Création de vidéos souvenir personnalisées.",
       "invoice_creation[invoice_data][metadata][project_id]": project.id,
       "invoice_creation[invoice_data][custom_fields][0][name]": "Dossier",
       "invoice_creation[invoice_data][custom_fields][0][value]": project.id,

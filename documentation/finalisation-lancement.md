@@ -35,8 +35,8 @@ Cette formulation évite de demander des autorisations excessives pour un usage 
 
 - [x] Ajouter la clause droit à l'image retenue dans les CGV.
 - [x] Choisir un médiateur de la consommation pressenti.
-- [ ] Adhérer au médiateur de la consommation retenu.
-- [ ] Remplacer la mention "à confirmer après adhésion" dans les CGV et les mentions légales.
+- [x] Adhérer au médiateur de la consommation retenu.
+- [x] Remplacer la mention "à confirmer après adhésion" dans les CGV et les mentions légales.
 - [x] Ajouter l'hébergeur définitif quand le site sera en ligne.
 
 ### 3. Base de données Supabase
@@ -166,7 +166,7 @@ Pourquoi : le paiement, le webhook et les deux emails fonctionnent. Le site stat
 Première action concrète :
 
 1. Passer Stripe en production.
-2. Adhérer au médiateur de la consommation retenu et remplacer la mention provisoire dans les CGV.
+2. Finaliser le droit de rétractation dans les CGV.
 3. Préparer la commercialisation.
 
 ## Reprise prochaine session
@@ -192,7 +192,7 @@ DNS veut dire : réglages du nom de domaine. Cela dira à `souvenirdepaddock.com
 
 - Vérifier que `https://souvenirdepaddock.com` affiche bien la landing page.
 - Configurer Stripe en mode production avant les vraies ventes.
-- Adhérer au médiateur de la consommation pressenti et remplacer la mention provisoire dans les CGV.
+- Finaliser le droit de rétractation dans les CGV.
 - Préparer la commercialisation.
 
 ## Passage Stripe production
@@ -281,6 +281,11 @@ Modifications préparées :
 
 - Favicon SVG ajouté : `assets/favicon.svg`.
 - Favicon relié à la landing page, aux CGV et à la page confidentialité.
+- Page mentions légales ajoutée avec Netlify comme hébergeur.
+- Médiateur CM2C ajouté dans les CGV et les mentions légales après adhésion.
+- Avant paiement, le montant de 79 euros est rappelé dans le bloc de validation.
+- Pendant l'envoi des photos, le bouton affiche un état de chargement et le message d'envoi est plus visible.
+- Après paiement confirmé, le message indique qu'un email de confirmation sera envoyé.
 - Footer mobile corrigé : email, confidentialité et CGV alignés à droite.
 - Image héros mobile recadrée pour mieux afficher le visage du pilote.
 - Dossier `dist` régénéré localement.
