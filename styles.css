@@ -791,10 +791,21 @@ textarea:focus {
     justify-content: flex-end;
   }
 
+  .site-header.is-compact {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .site-header.is-compact .brand {
+    width: clamp(180px, 22vw, 250px);
+    padding: 7px 10px;
+    box-shadow: 0 8px 22px rgba(20, 18, 15, 0.12);
+  }
+
   .hero {
     min-height: 84vh;
     padding-top: 142px;
-    background-position: 66% center;
+    background-position: 56% center;
   }
 
   .legal-title-single {

@@ -50,7 +50,7 @@ const offers = {
   short: {
     name: "Vidéo courte",
     duration: "environ 1 minute",
-    price: "79 €",
+    price: "79\u00a0€",
     target: "120 à 160 mots",
   },
 };
