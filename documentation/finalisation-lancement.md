@@ -286,14 +286,17 @@ Modifications préparées :
 - Image héros mobile recadrée pour mieux afficher le visage du pilote.
 - Dossier `dist` régénéré localement.
 - Déploiement Netlify production effectué sur `https://souvenirdepaddock.com`.
+- Dernier déploiement Netlify production validé le 2 juin 2026 après ajout des mentions légales, CM2C, rappel du montant avant paiement et amélioration de l'état d'envoi des photos.
 
 Test post-déploiement Netlify :
 
-- Ouvrir `https://souvenirdepaddock.com` sur mobile.
-- Vérifier que le visage du pilote est visible dans le héros mobile.
-- Vérifier que le footer mobile est cohérent : contact, confidentialité et CGV à droite.
-- Vérifier que le favicon apparaît dans l'onglet du navigateur.
-- Vérifier que les mentions `79 €` ne se coupent pas entre `79` et `€`.
+- [x] Vérifier que `https://souvenirdepaddock.com` répond correctement.
+- [x] Vérifier que les pages `mentions-legales.html`, `cgv.html` et `confidentialite.html` répondent correctement.
+- [ ] Ouvrir `https://souvenirdepaddock.com` sur mobile.
+- [ ] Vérifier que le visage du pilote est visible dans le héros mobile.
+- [ ] Vérifier que le footer mobile est cohérent : contact, confidentialité, mentions légales et CGV à droite.
+- [ ] Vérifier que le favicon apparaît dans l'onglet du navigateur.
+- [ ] Vérifier que les mentions `79 €` ne se coupent pas entre `79` et `€`.
 
 GitHub :
 
