@@ -221,7 +221,37 @@ Attention : une fois ces secrets live configurés, les cartes de test Stripe ne 
 - Secret Supabase `STRIPE_SECRET_KEY` remplacé par la clé live limitée.
 - Webhook Stripe live créé vers `stripe-webhook`.
 - Secret Supabase `STRIPE_WEBHOOK_SECRET` remplacé par le secret live.
-- Prochaine vérification : vraie commande live, puis remboursement si besoin.
+- Vraie commande live testée avec succès.
+- Email client et email interne reçus.
+- Remboursement partiel effectué dans Stripe pour éviter un solde négatif lié aux commissions.
+
+## Factures clients
+
+Besoin :
+
+- Fournir une facture systématique au client.
+- Important aussi pour les associations, clubs ou structures qui commandent.
+
+Solution retenue :
+
+- Stripe génère automatiquement une facture lors du paiement Checkout.
+- Stripe demande les informations de facturation au moment du paiement.
+- La collecte d'identifiant fiscal est activée si le client en a besoin.
+- L'email de confirmation client indique que la facture est générée par Stripe.
+
+Code préparé :
+
+- `create-checkout-session` active `invoice_creation`.
+- `create-checkout-session` rend l'adresse de facturation obligatoire.
+- `create-checkout-session` active `tax_id_collection`.
+- `stripe-webhook` ajoute une phrase facture dans l'email client.
+
+État :
+
+- `create-checkout-session` redéployée.
+- `stripe-webhook` redéployée.
+- À vérifier dans Stripe : l'envoi automatique des emails de paiement/facture est activé.
+- Faire un nouveau paiement live de test et vérifier que la facture est bien générée.
 
 ## Test production paiement
 

@@ -78,6 +78,9 @@ const createStripeCheckoutSession = async (project: any) => {
     body: encodeForm({
       mode: "payment",
       customer_email: project.customer_email,
+      customer_creation: "always",
+      billing_address_collection: "required",
+      "tax_id_collection[enabled]": "true",
       success_url: `${siteUrl}/?payment=success&project=${project.id}`,
       cancel_url: `${siteUrl}/?payment=cancelled&project=${project.id}`,
       "line_items[0][quantity]": "1",
@@ -88,6 +91,12 @@ const createStripeCheckoutSession = async (project: any) => {
         "Vidéo souvenir personnalisée d'environ une minute, livrée sous 7 jours maximum après réception des éléments complets.",
       "metadata[project_id]": project.id,
       "payment_intent_data[metadata][project_id]": project.id,
+      "invoice_creation[enabled]": "true",
+      "invoice_creation[invoice_data][description]":
+        "Vidéo souvenir personnalisée Souvenir de Paddock.",
+      "invoice_creation[invoice_data][metadata][project_id]": project.id,
+      "invoice_creation[invoice_data][custom_fields][0][name]": "Dossier",
+      "invoice_creation[invoice_data][custom_fields][0][value]": project.id,
     }),
   });
 

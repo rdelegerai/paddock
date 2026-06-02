@@ -290,6 +290,7 @@ const customerEmail = (project: Project) => {
     <p>Votre commande Souvenir de Paddock est bien confirmée pour ${escapeHtml(project.pilot_name || "le pilote renseigné")}.</p>
     <p><strong>Montant :</strong> ${escapeHtml(formatAmount(project.amount_cents, project.currency))}</p>
     <p><strong>Délai annoncé :</strong> 7 jours calendaires maximum après paiement et réception des éléments complets.</p>
+    <p>La facture est générée par Stripe avec les informations de facturation saisies au paiement.</p>
     <p>Je vais maintenant préparer la vidéo souvenir à partir des informations et photos transmises.</p>
     <p>Si une information manque, je vous recontacterai par email.</p>
     <p>Bien cordialement,<br>Renan<br>Souvenir de Paddock</p>
@@ -300,6 +301,7 @@ const customerEmail = (project: Project) => {
     `Votre commande Souvenir de Paddock est bien confirmée pour ${project.pilot_name || "le pilote renseigné"}.`,
     `Montant : ${formatAmount(project.amount_cents, project.currency)}`,
     "Délai annoncé : 7 jours calendaires maximum après paiement et réception des éléments complets.",
+    "La facture est générée par Stripe avec les informations de facturation saisies au paiement.",
     "",
     "Je vais maintenant préparer la vidéo souvenir à partir des informations et photos transmises.",
     "Si une information manque, je vous recontacterai par email.",
