@@ -6,3 +6,14 @@ config.local.js
 node_modules/
 .supabase/
 supabase/.temp/
+_contact_sheets/
+tools/video-studio/.venv/
+tools/video-studio/tmp/
+tools/video-studio/output/
+tools/video-studio/models/
+tools/video-studio/tessdata/
+video-landing-page/
+
+# Local Netlify folder
+.netlify
+dist/

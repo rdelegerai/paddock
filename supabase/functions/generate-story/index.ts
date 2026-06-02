@@ -28,7 +28,7 @@ const storySettingsByLength: Record<string, StorySettings> = {
 
 const storyStructureByLength: Record<string, string> = {
   short:
-    "Structure 1 minute : présenter le pilote, raconter les débuts, citer les voitures/lieux essentiels, raconter le grand souvenir, évoquer une difficulté ou anecdote, remercier les proches, conclure sur le message final.",
+    "Structure 1 minute : présenter le pilote, raconter les débuts, citer les voitures/lieux essentiels, raconter le grand souvenir, évoquer une difficulté ou anecdote, faire exister les proches et amis qui ont partagé l'aventure, conclure sur le message final.",
   long:
     "Structure 3 minutes : suivre le même arc que la vidéo courte, mais développer davantage la chronologie, les saisons ou périodes importantes, les voitures et lieux, l'ambiance d'équipe, une anecdote secondaire, les proches, puis la transmission finale.",
   standard:
@@ -82,7 +82,7 @@ const getOpenAiText = async (answers: Answers, offer: Record<string, string>) =>
       temperature: getTemperature(),
       max_output_tokens: settings.maxOutputTokens,
       instructions:
-        "Tu écris pour Souvenir de Paddock, un service de vidéos souvenirs pour pilotes de compétition automobile historique. Tu rédiges une voix off en français, prête à être lue. Le style est sobre, humain, précis, chaleureux, jamais commercial. Évite les formules creuses. Privilégie les faits concrets, les personnes, les voitures, les paddocks, les circuits et les émotions simples. N'invente aucun fait. Si une information est incertaine, formule-la prudemment. Ne mets pas de titres, de listes, ni de markdown. Si des notes libres ou une biographie longue sont fournies, utilise-les comme matière source : extrais les faits utiles, ne recopie pas tout. Respecte strictement le nombre maximal de mots transmis.",
+        "Tu écris pour Souvenir de Paddock, un service de vidéos souvenirs pour pilotes de compétition automobile historique. Tu rédiges une voix off en français, prête à être lue. Le style est sobre, humain, précis, chaleureux, jamais commercial. Évite les formules creuses. Privilégie les faits concrets, les personnes, les voitures, les paddocks, les circuits et les émotions simples. N'invente aucun fait. Si une information est incertaine, formule-la prudemment. Ne mets pas de titres, de listes, ni de markdown. Si des notes libres ou une biographie longue sont fournies, utilise-les comme matière source : extrais les faits utiles, ne recopie pas tout. Ne présente pas la vidéo comme si elle était forcément commandée ou écrite par le pilote. Évite les formulations du type « il veut remercier » sauf si le questionnaire dit explicitement que le pilote parle en son nom. Pour la fin, préfère une tournure de mémoire partagée : les proches, l'équipe et les amis restent associés à l'aventure. Respecte strictement le nombre maximal de mots transmis.",
       input: [
         {
           role: "user",
@@ -98,7 +98,7 @@ const getOpenAiText = async (answers: Answers, offer: Record<string, string>) =>
                   structure_recommandee: structure,
                   reponses_questionnaire: answers,
                   consignes:
-                    "Écris en paragraphes courts. Garde une narration fluide, en troisième personne. Suis la structure recommandée, sans titres visibles. Donne plus de poids au moment de fierté, à la difficulté ou anecdote, aux proches et au message final. Les champs supplémentaires sont optionnels : utilise-les seulement s'ils enrichissent vraiment la narration. Ne dépasse pas le nombre maximal de mots.",
+                    "Écris en paragraphes courts. Garde une narration fluide, en troisième personne. Suis la structure recommandée, sans titres visibles. Donne plus de poids au moment de fierté, à la difficulté ou anecdote, aux proches et au message final. Les champs supplémentaires sont optionnels : utilise-les seulement s'ils enrichissent vraiment la narration. Dans la conclusion, ne fais pas dire au pilote qu'il remercie tout le monde par défaut ; formule plutôt ce qui reste de l'aventure et la place des proches autour de lui. Ne dépasse pas le nombre maximal de mots.",
                 },
                 null,
                 2

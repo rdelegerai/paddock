@@ -4,7 +4,6 @@ const printStory = document.querySelector("#printStory");
 const photoInput = document.querySelector("#photos");
 const photoPreview = document.querySelector("#photoPreview");
 const exampleVideo = document.querySelector("#exampleVideo");
-const bioFileInput = document.querySelector("#bioFile");
 const toggleExtraQuestionsButton = document.querySelector("#toggleExtraQuestions");
 const extraQuestions = document.querySelector("#extraQuestions");
 const submitProjectButton = document.querySelector("#submitProject");
@@ -18,6 +17,8 @@ const testExampleButtons = document.querySelectorAll(".test-example-button");
 const stepCards = document.querySelectorAll(".step-card[data-step]");
 const stepToggleButtons = document.querySelectorAll("[data-step-toggle]");
 const nextStepButtons = document.querySelectorAll("[data-next-step]");
+const showPaymentButton = document.querySelector("[data-show-payment]");
+const paymentPanel = document.querySelector("#paymentPanel");
 
 const appConfig =
   window.SOUVENIR_DE_PADDOCK_CONFIG ||
@@ -25,15 +26,11 @@ const appConfig =
   window.PILOT_APP_CONFIG ||
   {};
 const hasSupabaseConfig = Boolean(appConfig.supabaseUrl && appConfig.supabaseAnonKey);
-const draftStorageKey = "souvenirDePaddockDraftV3";
+const draftStorageKey = "souvenirDePaddockDraftV4";
 
 const fields = [
   "pilotName",
-  "birthYear",
   "discipline",
-  "period",
-  "cityClub",
-  "contactEmail",
   "videoLength",
   "webNotes",
   "startStory",
@@ -41,19 +38,19 @@ const fields = [
   "proudMoment",
   "hardMoment",
   "familyMessage",
+  "contactEmail",
   "careerHighlights",
   "keyPeople",
   "funnyAnecdote",
   "rituals",
   "advice",
-  "bioNotes",
 ];
 
 const offers = {
   short: {
     name: "Vidéo courte",
     duration: "environ 1 minute",
-    price: "90 €",
+    price: "79 €",
     target: "120 à 160 mots",
   },
 };
@@ -78,7 +75,7 @@ const testExamples = {
     hardMoment:
       "À Nogaro, une casse de boîte de vitesses l'a obligé à abandonner alors qu'il était en tête de sa catégorie. Il a reconstruit la voiture avec deux amis pendant l'hiver et est revenu courir la saison suivante.",
     familyMessage:
-      "Il veut remercier sa femme Claire, ses enfants, les mécaniciens bénévoles et les amis de paddock qui ont rendu cette aventure possible.",
+      "Il reste surtout Claire, ses enfants, les mécaniciens bénévoles et les amis de paddock : ceux qui ont fait de cette aventure une histoire partagée.",
     careerHighlights:
       "Participation régulière aux trophées historiques de Formule Ford entre les années 1990 et 2000. Plusieurs podiums de classe, une victoire à Dijon-Prenois, et une fidélité particulière aux courses de clubs.",
     keyPeople:
@@ -89,8 +86,6 @@ const testExamples = {
       "Toujours vérifier lui-même la pression des pneus, toucher le volant avant de fermer le harnais, puis boire un café très serré avec l'équipe.",
     advice:
       "Commencer humblement, écouter les anciens, respecter la mécanique et ne jamais confondre courage et précipitation.",
-    bioNotes:
-      "Henri Marchal est un pilote fictif imaginé pour tester Souvenir de Paddock. Son histoire doit évoquer la passion des courses historiques françaises, les week-ends de club, les remorques chargées le vendredi soir et les paddocks où tout le monde se connaît. Le ton doit rester simple, chaleureux et crédible.",
   },
   rallye: {
     pilotName: "Lucien Valory",
@@ -122,8 +117,6 @@ const testExamples = {
       "Relire les trois premières pages de notes avant de monter dans la voiture, garder une petite clé de 13 dans la poche de combinaison, et ne jamais changer de casque pendant une saison qui se passe bien.",
     advice:
       "Apprendre à finir avant de vouloir gagner. Une voiture bien ramenée au parc fermé apprend plus qu'un abandon spectaculaire.",
-    bioNotes:
-      "Lucien Valory est un pilote fictif créé pour tester une narration courte. Son histoire doit faire sentir les routes de rallye, les assistances de nuit, les voitures populaires préparées avec peu de moyens, puis le plaisir du retour en historique. La vidéo peut alterner photos de voitures, cartes routières, paddocks, ateliers et images d'époque reconstituées.",
   },
 };
 
@@ -133,10 +126,29 @@ let selectedPhotoFiles = [];
 
 const getInput = (id) => document.querySelector(`#${id}`);
 const getValue = (id) => getInput(id)?.value.trim() || "";
+const isChecked = (id) => Boolean(getInput(id)?.checked);
 
 const setStatus = (message, type = "") => {
   appStatus.textContent = message;
   appStatus.className = `app-status ${type}`.trim();
+};
+
+const scrollToElement = (element, block = "start") => {
+  if (!element) return;
+  element.scrollIntoView({ behavior: "smooth", block });
+};
+
+const showPaymentReturnStatus = () => {
+  const payment = new URLSearchParams(window.location.search).get("payment");
+
+  if (payment === "success") {
+    setStatus("Paiement confirmé. Votre dossier a bien été transmis.", "success");
+    window.setTimeout(() => scrollToElement(appStatus, "center"), 120);
+  }
+  if (payment === "cancelled") {
+    setStatus("Paiement annulé. Votre dossier n'a pas été payé.", "error");
+    window.setTimeout(() => scrollToElement(appStatus, "center"), 120);
+  }
 };
 
 const startExampleVideo = () => {
@@ -191,6 +203,9 @@ const getAnswers = () => {
   answers.keyPlaces = getValue("vehicleAndPlaces");
   answers.favoriteCar = getValue("vehicleAndPlaces");
   answers.emotionalMemory = getValue("familyMessage");
+  answers.acceptTerms = isChecked("acceptTerms") ? "true" : "";
+  answers.acceptDelay = isChecked("acceptDelay") ? "true" : "";
+  answers.acceptImageRights = isChecked("acceptImageRights") ? "true" : "";
   return answers;
 };
 
@@ -242,6 +257,12 @@ const uploadProjectPhotos = async (projectId, files) => {
   return uploaded;
 };
 
+const createCheckoutSession = async (projectId) => {
+  const data = await callEdgeFunction("create-checkout-session", { projectId });
+  if (!data.checkoutUrl) throw new Error("Stripe n'a pas renvoyé de lien de paiement.");
+  return data.checkoutUrl;
+};
+
 const buildLocalStory = () => {
   const name = getValue("pilotName") || "ce pilote";
   const birthYear = getValue("birthYear");
@@ -255,11 +276,13 @@ const buildLocalStory = () => {
   const vehicleAndPlaces = sentence(getValue("vehicleAndPlaces"), "Les voitures, les circuits et les paddocks ont laissé des souvenirs forts.");
   const proudMoment = sentence(getValue("proudMoment"), "Un moment de fierté résume ce que la compétition représentait pour lui.");
   const hardMoment = sentence(getValue("hardMoment"), "La course a aussi apporté des difficultés et des anecdotes que l'on n'oublie pas.");
-  const familyMessage = sentence(getValue("familyMessage"), "À ses proches, il veut surtout dire merci pour la présence et les souvenirs partagés.");
+  const familyMessage = sentence(
+    getValue("familyMessage"),
+    "Il reste surtout les visages des proches, de l'équipe et des amis de paddock : ceux qui ont fait de cette aventure une histoire partagée."
+  );
   const keyPeople = sentence(getValue("keyPeople"), "");
-  const bioNotes = sentence(getValue("bioNotes"), "");
 
-  return `${intro}\n\n${startStory}\n\n${vehicleAndPlaces}\n\n${proudMoment}\n\n${hardMoment}${keyPeople ? `\n\n${keyPeople}` : ""}${bioNotes ? `\n\n${bioNotes}` : ""}\n\n${familyMessage}`;
+  return `${intro}\n\n${startStory}\n\n${vehicleAndPlaces}\n\n${proudMoment}\n\n${hardMoment}${keyPeople ? `\n\n${keyPeople}` : ""}\n\n${familyMessage}`;
 };
 
 const generateStory = async () => {
@@ -332,6 +355,11 @@ const fillForm = (data) => {
     const input = getInput(field);
     if (input && data[field] !== undefined) input.value = data[field];
   });
+
+  ["acceptTerms", "acceptDelay", "acceptImageRights"].forEach((field) => {
+    const input = getInput(field);
+    if (input && data[field] !== undefined) input.checked = data[field] === "true";
+  });
 };
 
 const setExtraQuestionsVisible = (isVisible) => {
@@ -359,6 +387,13 @@ const openStep = (step) => {
   });
 };
 
+const openStepAndScroll = (step) => {
+  openStep(step);
+  window.setTimeout(() => {
+    scrollToElement(document.querySelector(`.step-card[data-step="${step}"]`), "start");
+  }, 80);
+};
+
 const closeStep = (step) => {
   const card = document.querySelector(`.step-card[data-step="${step}"]`);
   if (!card) return;
@@ -373,6 +408,7 @@ const closeAllSteps = () => {
     const toggle = card.querySelector("[data-step-toggle]");
     if (toggle) toggle.setAttribute("aria-expanded", "false");
   });
+  if (paymentPanel) paymentPanel.hidden = true;
 };
 
 const toggleStep = (step) => {
@@ -385,10 +421,6 @@ const toggleStep = (step) => {
   openStep(step);
 };
 
-const hasExtraAnswers = (data = {}) =>
-  ["careerHighlights", "keyPeople", "funnyAnecdote", "rituals", "advice", "bioNotes"].some((field) =>
-    String(data[field] || "").trim()
-  );
 const updateTestExampleButtons = () => {
   testExampleButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.example === activeTestExampleKey);
@@ -406,7 +438,6 @@ const clearQuestionnaire = () => {
   printStory.textContent = "";
   selectedPhotoFiles = [];
   photoInput.value = "";
-  bioFileInput.value = "";
   renderPhotoPreview();
   updateQuestionnaireMode();
   closeAllSteps();
@@ -473,8 +504,12 @@ const loadDraft = () => {
 
 const validateBeforeFinalSubmit = () => {
   if (!storyOutput.value.trim()) return "Générez ou écrivez d'abord le texte final.";
+  if (selectedPhotoFiles.length < 10) return "Ajoutez au moins 10 photos avant de valider le dossier.";
   if (!getValue("contactEmail")) return "Ajoutez votre email avant de valider le dossier.";
-  if (!selectedPhotoFiles.length) return "Ajoutez au moins une photo avant de valider le dossier.";
+  if (!getInput("contactEmail")?.checkValidity()) return "Ajoutez une adresse email valide.";
+  if (!isChecked("acceptTerms")) return "Vous devez accepter les CGV avant de valider le dossier.";
+  if (!isChecked("acceptDelay")) return "Vous devez confirmer le délai maximum de 7 jours.";
+  if (!isChecked("acceptImageRights")) return "Vous devez confirmer l'information sur le droit à l'image.";
   return "";
 };
 
@@ -491,34 +526,67 @@ stepToggleButtons.forEach((button) => {
   button.addEventListener("click", () => toggleStep(button.dataset.stepToggle));
 });
 
+const validateQuestionnaireAndGenerateStory = async (button) => {
+  setBusy(true);
+  setButtonLoading(button, true, "Génération du texte...");
+  setStatus(hasSupabaseConfig ? "Génération du texte en cours..." : "Mode local : génération sans IA.");
+
+  try {
+    storyOutput.value = await generateStory();
+    updateWordCount();
+    saveDraft();
+    openStepAndScroll("2");
+    setStatus("Texte généré. Vous pouvez le relire et le corriger.", "success");
+  } catch (error) {
+    storyOutput.value = buildLocalStory();
+    updateWordCount();
+    saveDraft();
+    openStepAndScroll("2");
+    setStatus(`IA indisponible, texte local généré à la place. ${error.message}`, "error");
+  } finally {
+    setButtonLoading(button, false);
+    setBusy(false);
+  }
+};
+
+const validateFinalText = () => {
+  if (!storyOutput.value.trim()) {
+    setStatus("Le texte final est vide. Revenez au questionnaire pour le générer.", "error");
+    return;
+  }
+  openStepAndScroll("3");
+  setStatus("");
+};
+
 nextStepButtons.forEach((button) => {
-  button.addEventListener("click", () => openStep(button.dataset.nextStep));
+  button.addEventListener("click", () => {
+    if (button.dataset.nextStep === "2") {
+      validateQuestionnaireAndGenerateStory(button);
+      return;
+    }
+    if (button.dataset.nextStep === "3") {
+      validateFinalText();
+      return;
+    }
+    openStepAndScroll(button.dataset.nextStep);
+  });
+});
+
+showPaymentButton?.addEventListener("click", () => {
+  if (selectedPhotoFiles.length < 10) {
+    setStatus("Ajoutez au moins 10 photos avant de valider cette étape.", "error");
+    return;
+  }
+
+  if (paymentPanel) {
+    paymentPanel.hidden = false;
+    scrollToElement(paymentPanel, "start");
+  }
+  setStatus("");
 });
 
 testExampleButtons.forEach((button) => {
   button.addEventListener("click", () => applyTestExample(button.dataset.example));
-});
-
-
-bioFileInput?.addEventListener("change", async () => {
-  const file = bioFileInput.files?.[0];
-  if (!file) return;
-
-  if (!/\.(txt|md)$/i.test(file.name) && !["text/plain", "text/markdown"].includes(file.type)) {
-    setStatus("Pour l'instant, importez une biographie en .txt ou .md, ou copiez le texte dans le champ libre.", "error");
-    bioFileInput.value = "";
-    return;
-  }
-
-  try {
-    const text = await file.text();
-    const input = getInput("bioNotes");
-    input.value = [input.value.trim(), text.trim()].filter(Boolean).join("\n\n");
-    saveDraft();
-    setStatus("Biographie importée dans le champ libre.", "success");
-  } catch (error) {
-    setStatus(`Impossible de lire ce fichier. ${error.message}`, "error");
-  }
 });
 
 offerButtons.forEach((button) => {
@@ -531,7 +599,7 @@ offerButtons.forEach((button) => {
   });
 });
 
-generateStoryButton.addEventListener("click", async () => {
+generateStoryButton?.addEventListener("click", async () => {
   setBusy(true);
   setButtonLoading(generateStoryButton, true, "Génération en cours...");
   setStatus(hasSupabaseConfig ? "Génération du texte en cours..." : "Mode local : génération sans IA.");
@@ -541,14 +609,13 @@ generateStoryButton.addEventListener("click", async () => {
     updateWordCount();
     saveDraft();
     setStatus("Texte généré. Vous pouvez le corriger directement avant validation.", "success");
-    openStep("3");
-    storyOutput.scrollIntoView({ behavior: "smooth", block: "center" });
+    openStepAndScroll("2");
     storyOutput.focus();
   } catch (error) {
     storyOutput.value = buildLocalStory();
     updateWordCount();
     saveDraft();
-    openStep("3");
+    openStepAndScroll("2");
     setStatus(`IA indisponible, texte local généré à la place. ${error.message}`, "error");
   } finally {
     setButtonLoading(generateStoryButton, false);
@@ -594,10 +661,9 @@ submitProjectButton.addEventListener("click", async () => {
       uploadedCount = uploadedPhotos.length;
     }
 
-    setStatus(
-      `Dossier validé. Référence : ${projectId.slice(0, 8) || "créée"}. Photos envoyées : ${uploadedCount}. Paiement à brancher ensuite.`,
-      "success"
-    );
+    setStatus(`Dossier enregistré. Photos envoyées : ${uploadedCount}. Ouverture du paiement...`, "success");
+    const checkoutUrl = await createCheckoutSession(projectId);
+    window.location.href = checkoutUrl;
   } catch (error) {
     setStatus(`Impossible d'enregistrer le dossier. ${error.message}`, "error");
   } finally {
@@ -631,22 +697,7 @@ updateOfferSelection();
 updateQuestionnaireMode();
 updateOfferSummary();
 updateWordCount();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+showPaymentReturnStatus();
 
 
 

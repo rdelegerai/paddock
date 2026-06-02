@@ -1,0 +1,6 @@
+faster-whisper
+numpy
+opencv-python
+pillow
+pytesseract
+scenedetect

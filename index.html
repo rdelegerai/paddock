@@ -4,12 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Souvenir de Paddock</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <header class="site-header">
       <a class="brand" href="#accueil" aria-label="Souvenir de Paddock">
-        <img src="assets/logo-souvenir-de-paddock.svg" alt="" />
+        <img src="assets/logo-souvenir-de-paddock-header.png" alt="" />
       </a>
 
     </header>
@@ -17,9 +18,9 @@
     <main>
       <section id="accueil" class="hero">
         <div class="hero-content">
-          <p class="eyebrow">Portrait vidéo pour pilotes de compétition historique</p>
+          <p class="eyebrow">Portraits de pilotes de compétition historique</p>
           <h1><span>Souvenir</span><span>de&nbsp;Paddock</span></h1>
-          <p class="hero-text">Nous créons une vidéo souvenir d'environ 1 minute, à partir de vos photos transformées en séquences vidéo, pour 90 €.</p>
+          <p class="hero-text">Création de vidéos souvenir soignées à partir de vos photos.<br />Format 1 minute, 79 € en offre de lancement.</p>
           <div class="hero-actions">
             <a class="button secondary" href="#exemples">Voir l'offre</a>
             <a class="button secondary" href="#video-exemple">Voir un exemple</a>
@@ -31,20 +32,20 @@
       <section id="exemples" class="section service-section">
         <div class="section-heading">
           <p class="eyebrow">Offre de lancement</p>
-          <h2>Une vidéo souvenir courte et personnelle</h2>
+          <h2>Un souvenir vidéo simple à créer</h2>
         </div>
         <div class="service-grid">
           <article class="service-item">
-            <h3>Format court</h3>
-            <p>Environ 1 minute, facile à regarder, à envoyer et à partager avec la famille ou le club.</p>
+            <h3>Formule simple</h3>
+            <p>Une vidéo souvenir d’environ 1 minute, proposée à 79 € pour l’offre de lancement.</p>
           </article>
           <article class="service-item">
-            <h3>Prix simple</h3>
-            <p>90 € pour une vidéo personnalisée, sans formule compliquée ni option à choisir au départ.</p>
+            <h3>Narration sur mesure</h3>
+            <p>Le questionnaire crée une première narration, que vous pouvez relire et modifier avant validation.</p>
           </article>
           <article class="service-item">
             <h3>Photos animées</h3>
-            <p>Vos photos sont transformées en séquences vidéo, puis assemblées à la main avec le texte.</p>
+            <p>Vos photos sont animées en courtes séquences, puis je réalise le montage avec votre texte validé.</p>
           </article>
         </div>
       </section>
@@ -61,7 +62,7 @@
           preload="auto"
           controls
         >
-          <source src="https://qmhubedesoidofqrvdux.supabase.co/storage/v1/object/public/landing%20page/_VIDEO-FINALE_720p%20(1).mp4" type="video/mp4" />
+          <source src="assets/video-exemple-henri-marchal.mp4" type="video/mp4" />
           Votre navigateur ne peut pas lire cette vidéo.
         </video>
       </section>
@@ -69,7 +70,7 @@
       <section id="votre-video" class="section builder-section">
         <div class="section-heading compact">
           <h2>Votre vidéo en 3 étapes</h2>
-          <p>Offre de lancement : une vidéo souvenir personnalisée d'environ 1 minute, pour 90 €.</p>
+          <p>Offre de lancement : une vidéo souvenir personnalisée d'environ 1 minute pour 79 €.</p>
         </div>
 
         <form id="storyForm" class="flow-panel">
@@ -84,38 +85,15 @@
               </span>
             </button>
             <div class="step-body">
+              <p class="step-intro">Ce questionnaire sert à générer le texte de narration de la vidéo.</p>
               <div class="field-grid two-cols">
                 <label>
                   Nom du pilote
                   <input id="pilotName" name="pilotName" type="text" placeholder="Ex. Jean Martin" autocomplete="name" />
                 </label>
                 <label>
-                  Année de naissance, si connue
-                  <input id="birthYear" name="birthYear" type="number" inputmode="numeric" placeholder="Ex. 1948" />
-                </label>
-                <label>
                   Discipline principale
-                  <select id="discipline" name="discipline">
-                    <option value="compétition automobile historique">Compétition automobile historique</option>
-                    <option value="Formule Ford historique">Formule Ford historique</option>
-                    <option value="Formule France historique">Formule France historique</option>
-                    <option value="rallye historique">Rallye historique</option>
-                    <option value="course de côte historique">Course de côte historique</option>
-                    <option value="karting et compétition historique">Karting et compétition historique</option>
-                    <option value="karting">Karting</option>
-                  </select>
-                </label>
-                <label>
-                  Années de pratique, si connues
-                  <input id="period" name="period" type="text" placeholder="Ex. de 1978 à 2005" />
-                </label>
-                <label>
-                  Ville, région ou club, optionnel
-                  <input id="cityClub" name="cityClub" type="text" placeholder="Ex. ASA, club, région..." />
-                </label>
-                <label>
-                  Votre email
-                  <input id="contactEmail" name="contactEmail" type="email" placeholder="exemple@email.fr" autocomplete="email" />
+                  <input id="discipline" name="discipline" type="text" placeholder="Ex. Formule Ford historique" />
                 </label>
               </div>
 
@@ -137,7 +115,7 @@
                   <textarea id="hardMoment" name="hardMoment" rows="2"></textarea>
                 </label>
                 <label>
-                  5. Quelles personnes faut-il remercier ou citer ?
+                  5. Quelles personnes faut-il citer ou mettre en avant ?
                   <textarea id="keyPeople" name="keyPeople" rows="2"></textarea>
                 </label>
                 <label>
@@ -146,27 +124,31 @@
                 </label>
               </div>
 
-              <div class="free-notes-block">
-                <label>
-                  Biographie, notes libres ou texte déjà écrit
-                  <textarea id="bioNotes" name="bioNotes" rows="5"></textarea>
-                </label>
-                <label>
-                  Importer une biographie en fichier texte
-                  <input id="bioFile" name="bioFile" type="file" accept=".txt,.md,text/plain,text/markdown" />
-                </label>
-              </div>
-
-              <div id="offerSummary" class="offer-summary">Vidéo courte - environ 1 minute - 90 €</div>
               <div class="form-actions compact-actions">
                 <button class="button secondary" type="button" data-next-step="2">Valider cette étape</button>
               </div>
             </div>
           </section>
 
-          <section class="step-card" data-step="2">
+          <section class="step-card generated-step" data-step="2">
             <button class="step-title" type="button" data-step-toggle="2" aria-expanded="false">
               <span class="step-number">2</span>
+              <span class="step-title-copy">
+                <span class="step-heading">Relire et corriger le texte final</span>
+              </span>
+            </button>
+            <div class="step-body">
+              <textarea id="generatedStory" rows="14" placeholder="Le texte apparaîtra ici après génération. Vous pourrez le corriger directement."></textarea>
+              <div id="printStory" class="print-story" aria-hidden="true"></div>
+              <div class="form-actions compact-actions">
+                <button class="button secondary" type="button" data-next-step="3">Valider ce texte</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="step-card" data-step="3">
+            <button class="step-title" type="button" data-step-toggle="3" aria-expanded="false">
+              <span class="step-number">3</span>
               <span class="step-title-copy">
                 <span class="step-heading">Ajouter les photos</span>
               </span>
@@ -174,33 +156,35 @@
             <div class="step-body">
               <label>
                 Photos du pilote, voitures, paddocks, famille, trophées
+                <span class="field-help">Ajoutez au moins 10 photos. Idéalement, 15 à 25 photos permettent de mieux rythmer la vidéo.</span>
                 <input id="photos" name="photos" type="file" accept="image/*" multiple />
               </label>
               <div id="photoPreview" class="photo-preview" aria-live="polite"></div>
               <div class="form-actions compact-actions">
-                <button class="button secondary" type="button" data-next-step="3">Valider cette étape</button>
+                <button class="button secondary" type="button" data-show-payment>Valider cette étape</button>
               </div>
             </div>
           </section>
 
-          <section class="step-card generated-step" data-step="3">
-            <button class="step-title" type="button" data-step-toggle="3" aria-expanded="false">
-              <span class="step-number">3</span>
-              <span class="step-title-copy">
-                <span class="step-heading">Relire et corriger le texte final</span>
-              </span>
-            </button>
-            <div class="step-body">
-              <div class="form-actions compact-actions">
-                <button id="generateStory" class="button primary" type="button">Générer le texte</button>
-              </div>
-              <textarea id="generatedStory" rows="14" placeholder="Le texte apparaîtra ici après génération. Vous pourrez le corriger directement."></textarea>
-              <div id="printStory" class="print-story" aria-hidden="true"></div>
-              <div class="validation-panel">
-                <p>En validant, le texte final et les photos seront enregistrés dans le dossier. Le paiement sera ajouté ensuite.</p>
-                <button id="submitProject" class="button primary" type="button">Valider ce texte</button>
-              </div>
-            </div>
+          <section id="paymentPanel" class="validation-panel payment-panel" hidden>
+            <h3>Avant paiement</h3>
+            <label class="inline-field">
+              <span>Mon email</span>
+              <input id="contactEmail" name="contactEmail" type="email" placeholder="Ex. nom@email.fr" autocomplete="email" />
+            </label>
+            <label class="checkbox-line">
+              <input id="acceptTerms" name="acceptTerms" type="checkbox" />
+              <span>J'accepte les <a href="cgv.html" target="_blank" rel="noopener">CGV</a>.</span>
+            </label>
+            <label class="checkbox-line">
+              <input id="acceptDelay" name="acceptDelay" type="checkbox" />
+              <span>Je comprends que la vidéo sera réalisée sous 7 jours maximum après paiement et réception des éléments complets.</span>
+            </label>
+            <label class="checkbox-line">
+              <input id="acceptImageRights" name="acceptImageRights" type="checkbox" />
+              <span>Toute diffusion publique de la vidéo relève de ma responsabilité.</span>
+            </label>
+            <button id="submitProject" class="button primary" type="button">Valider le dossier</button>
           </section>
 
           <div id="appStatus" class="app-status" role="status" aria-live="polite"></div>
@@ -209,15 +193,24 @@
     </main>
 
     <footer class="site-footer">
-      <p>Une question, une idée ou un retour sur Souvenir de Paddock ?</p>
-      <p>
-        Contact :
-        <a id="contactEmailLink" href="mailto:rdelegers.ai@gmail.com" data-copy-email="rdelegers.ai@gmail.com">rdelegers.ai@gmail.com</a>
-        <span id="contactCopyStatus" class="contact-copy-status" aria-live="polite"></span>
-      </p>
+      <div class="footer-brand-block">
+        <img src="assets/logo-souvenir-de-paddock-header.png" alt="Souvenir de Paddock" />
+        <p>Vidéos souvenir pour pilotes de compétition historique.</p>
+      </div>
+      <div class="footer-contact-block">
+        <div class="footer-email-row">
+          <span id="contactCopyStatus" class="contact-copy-status" aria-live="polite"></span>
+          <a id="contactEmailLink" class="footer-email" href="mailto:contact@souvenirdepaddock.com" data-copy-email="contact@souvenirdepaddock.com">contact@souvenirdepaddock.com</a>
+        </div>
+        <nav class="footer-links" aria-label="Liens légaux">
+          <a href="confidentialite.html">Confidentialité</a>
+          <a href="cgv.html">CGV</a>
+        </nav>
+      </div>
     </footer>
 
     <script src="config.js"></script>
+    <script src="header-scroll.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
