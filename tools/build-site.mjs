@@ -6,6 +6,7 @@ const dist = join(root, "dist");
 
 const files = [
   "index.html",
+  "mentions-legales.html",
   "cgv.html",
   "confidentialite.html",
   "styles.css",
