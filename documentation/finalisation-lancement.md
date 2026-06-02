@@ -128,8 +128,8 @@ Décision du 2 juin 2026 :
 - [x] Préparer la configuration Netlify.
 - [x] Déployer le site statique sur Netlify.
 - [x] Relier le domaine au site.
-- [ ] Configurer Supabase production.
-- [ ] Configurer Stripe production.
+- [x] Configurer Supabase production.
+- [x] Configurer Stripe production.
 - [ ] Faire une commande test complète.
 
 Configuration Netlify préparée :
@@ -209,11 +209,19 @@ Objectif : accepter de vrais paiements sur `https://souvenirdepaddock.com`.
 
 À faire dans Supabase :
 
-1. Remplacer `STRIPE_SECRET_KEY` par la clé live `sk_live...`.
-2. Remplacer `STRIPE_WEBHOOK_SECRET` par le secret live `whsec...`.
+1. Remplacer `STRIPE_SECRET_KEY` par la clé live `sk_live...`. Fait.
+2. Remplacer `STRIPE_WEBHOOK_SECRET` par le secret live `whsec...`. Fait.
 3. Garder `SITE_URL=https://souvenirdepaddock.com`.
 
 Attention : une fois ces secrets live configurés, les cartes de test Stripe ne fonctionneront plus sur le site public. Un test complet de paiement live nécessite une vraie carte, puis éventuellement un remboursement depuis Stripe.
+
+État du 2 juin 2026 :
+
+- Clé Stripe live limitée créée.
+- Secret Supabase `STRIPE_SECRET_KEY` remplacé par la clé live limitée.
+- Webhook Stripe live créé vers `stripe-webhook`.
+- Secret Supabase `STRIPE_WEBHOOK_SECRET` remplacé par le secret live.
+- Prochaine vérification : vraie commande live, puis remboursement si besoin.
 
 ## Test production paiement
 
